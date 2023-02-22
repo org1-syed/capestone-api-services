@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
 
-  resources :books
+  root 'home#index'
+
+  constraints format: :json do
+    resources :books
+  end
 end
