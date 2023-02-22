@@ -1,6 +1,7 @@
 class BooksController < ApplicationController
 
-  before_action :set_book, only: [:show, :destroy]
+  before_action :ensure_json_request, only: [:create, :update]
+  before_action :set_book, only: [:show, :destroy, :update]
 
   def index
     render json: Book.all
@@ -24,6 +25,14 @@ class BooksController < ApplicationController
     @book.destroy
 
     head :no_content
+  end
+
+  def update
+    if @book.update(title: params[:title], author: params[:author])
+      head :no_content
+    else
+      render json: @book.errors, status: :unprocessable_entity
+    end
   end
 
   private
