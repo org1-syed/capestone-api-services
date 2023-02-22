@@ -3,6 +3,10 @@ Rails.application.routes.draw do
   root 'home#index'
 
   constraints format: :json do
-    resources :books
+    namespace :api do
+      namespace :v1 do
+        resources :books
+      end
+    end
   end
 end
