@@ -10,4 +10,9 @@ class ApplicationController < ActionController::API
   def json_request?
     request.content_type.try(:include?, 'application/json')
   end
+
+  # Render error in json format if record not destroyed
+  def not_destroyed(e)
+    render json: { errors: e.record.errors }, status: :unprocessable_entity
+  end
 end

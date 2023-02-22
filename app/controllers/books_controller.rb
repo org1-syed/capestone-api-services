@@ -59,8 +59,4 @@ class BooksController < ApplicationController
     @book = Book.find_by(id: params[:id])
     render plain: 'Book not found', status: :not_found if @book.blank?
   end
-
-  def not_destroyed
-    render json: { }, status: :unprocessable_entity
-  end
 end
