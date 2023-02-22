@@ -4,7 +4,14 @@ class BooksController < ApplicationController
   before_action :set_book, only: [:show, :destroy, :update]
 
   def index
-    render json: Book.all
+    offset = params[:offset].try(:to_i) || 0
+    limit = params[:limit].try(:to_i) || 20
+
+    return render plain: 'limit must be between 1 and 100', status: :bad_request unless limit.between?(1, 100)
+
+    return render plain: 'offset must be greater than or equal to 0', status: :bad_request if offset.negative?
+
+    render json: Book.all.limit(limit).offset(offset).order(:name)
   end
 
   def show
