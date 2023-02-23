@@ -11,17 +11,13 @@ module Api
       def index
         offset = params[:offset].try(:to_i) || 0
         limit = params[:limit].try(:to_i) || 20
-        author = params[:author]
 
         return render plain: 'limit must be between 1 and 100', status: :bad_request unless limit.between?(1, 100)
 
         return render plain: 'offset must be greater than or equal to 0', status: :bad_request if offset.negative?
 
-        if author
-          render json: Book.where(author: author).limit(limit).offset(offset)
-        else
-          render json: Book.all.limit(limit).offset(offset).order(:author)
-        end
+        render json: Book.all.limit(limit).offset(offset).order(:title)
+
       end
 
       def show
