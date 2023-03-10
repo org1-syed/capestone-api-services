@@ -15,8 +15,8 @@ module Api
         return render plain: 'limit must be between 1 and 100', status: :bad_request unless limit.between?(1, 100)
 
         return render plain: 'offset must be greater than or equal to 0', status: :bad_request if offset.negative?
-
-        render json: Book.all.limit(limit).offset(offset).order(:title)
+        books = Book.all.limit(limit).offset(offset).order(:title)
+        render json: BooksRepresentor.new(books).as_json
 
       end
 
@@ -41,7 +41,7 @@ module Api
       end
 
       def update
-        if @book.update(title: params[:title], author: params[:author])
+        if @book.update(title: params[:title])
           head :no_content
         else
           render json: @book.errors, status: :unprocessable_entity
@@ -51,7 +51,7 @@ module Api
       private
 
       def book_params
-        params.permit(:title, :author)    # permit- only these params to be posted not others
+        params.permit(:title)    # permit- only these params to be posted not others
       end
 
       def set_book
